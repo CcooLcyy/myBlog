@@ -146,3 +146,23 @@ MySQL是关系型数据库管理系统（DBMS），可以使用多种编程语�
 复合键：将多个列作为一个索引键，用来符合索引。
 索引：可以快速访问数据表中的特定信息。比如书籍目录。
 参照完整性：要求关系中不能引用不存在实体。这一点是RDBMS必须要满足的完整性约束条件。为了保证数据的一致性。
+## SQL语句
+对大小写不敏感，SELECT与select是相同的。
+某些数据库要求每条SQL语句都要用分号分割，这是分割SQL语句的标准方法。因此我们要在每一条语句结束后加上分号。
+### select语句
+从数据库中选取数据，结果保存到结果表中，称为结果集。
+```sql
+SELECT column_name, column_name FROM table_name;
+
+SELECT  * FROM table_name;
+```
+`SELECT * FROM database`用于选取database表中所有的列
+
+`SELECT DSITINCT column_name, column_name FROM table_name;`
+从table_name表中去掉column_name列的重复的值。
+
+#### WHERE子句
+从表中选取符合条件的列
+`SELECT * FROM WebSites WHERE country = 'CN';`这条语句可以从WebSites表中找到所有的列，并且选取country为CN的列
+文本字段和数值字段：文本字段使用单引号引用，数值字段直接使用数值，不要加单引号，
+
