@@ -289,7 +289,7 @@ for count, value in enumerate(arr):
 
 这里有一个命名习惯，就是使用单下划线。这种仍然可以被外界访问到，但是在本类之外访问时要保持慎重。这更多的是一种暗示。
 
-## 使用class定义类
+## 使用class类
 
 ```python
 class Student():
@@ -303,6 +303,55 @@ class Student():
 在类中的函数我们成为对象的方法。
 
 我们定义好类之后可以使用类创建实例，实例可以做类中的事。
+
+## 使用@porperty装饰器
+
+虽然不建议将属性设置为私有，但是直接访问属性可能会造成一些问题。我们可以使用装饰器来进行安全方便的访问属性。
+
+```python
+class Person():
+    def __init__(self, name, age):
+        self._name = name
+        self._age = age
+    @property # 访问器：使用getter方法访问self._name
+    def name(self, name):
+        return self._name
+    @property
+    def age(self, age):
+        return self._age
+    @age.setter # 修改器：使用setter方法来修改self._age的值
+    def age(self, age):
+        self._age = age
+    def play(self):
+        if self._age <= 16:
+            print('%s正在玩飞行棋.' % self._name)
+        else:
+            print('%s正在玩斗地主.' % self._name)
+            
+def main2
+    person = Person('Daniel', 12)
+    person.play() #Daniel正在玩飞行棋.
+    person.age = 21
+    person.play() #Daniel正在玩斗地主.
+```
+
+通过这种操作我们可以直接修改属性的值，而且不会造成什么问题。
+
+## 使用`__slots__`绑定新属性和方法
+
+```python
+class Person():
+    __slots__ = (_name, _age, _gender)
+    def __init__(self, name, age):
+        self._name = name
+        self._age = age
+        
+person = Person('daniel', 21)
+person._gender = 'man'
+print(person._gender) # man
+```
+
+限定了Person对象只能绑定`_name _age _gender`属性。并且限定只能对当前类的对象起作用，不对子类起作用。绑定之后我们可以对属性或方法进行操作.
 
 # 生成二进制文件
 要想让没有安装python的用户使用程序，需要生成一个二进制文件，这里使用python的`pyinstaller`生成。
