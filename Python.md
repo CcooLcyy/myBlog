@@ -276,6 +276,8 @@ for count, value in enumerate(arr):
 ## 面向对象的理解
 
 1. 封装：将能够隐藏的隐藏起来，只向外界暴露接口。我们知道调用之后会有什么结果就好，无需知道内部的数据结构是如何定义以及如何操作的。
+1. 继承：我们可以在已有的类的基础上创建一个新类，让这个类从另一个类中继承方法和属性。提供信息的成为父类，超类，基类。继承的类称为子类或者派生类、衍生类。
+1. 多态：继承来的子类可以增加新的属性和方法，也可以对父类的方法进行重写。所以，不同的子类可以表现出不同的行为，这就是多态。
 
 ## 访问可见性
 
@@ -314,10 +316,10 @@ class Person():
         self._name = name
         self._age = age
     @property # 访问器：使用getter方法访问self._name
-    def name(self, name):
+    def name(self):
         return self._name
     @property
-    def age(self, age):
+    def age(self):
         return self._age
     @age.setter # 修改器：使用setter方法来修改self._age的值
     def age(self, age):
@@ -352,6 +354,111 @@ print(person._gender) # man
 ```
 
 限定了Person对象只能绑定`_name _age _gender`属性。并且限定只能对当前类的对象起作用，不对子类起作用。绑定之后我们可以对属性或方法进行操作.
+
+## 静态方法
+
+我们可以在类中定义不属于任何对象只属于类的方法。也就是静态方法。
+
+例：在构造三角形的类中，我们需要传入三条边，但是三条边并不一定能组成三角形，所以在构成三角形之前就需要判断能否构成三角形，此时还未构成三角形，因此还没使用类。也就是说这个方法属于三角形类的，而不属于三角形对象的。
+
+```python
+from math import sqrt
+
+class Triangle(object):
+
+    def __init__(self, a, b, c):
+        self._a = a
+        self._b = b
+        self._c = c
+    # 定义静态方法判断能否组成三角形。
+    @staticmethod
+    def is_valid(a, b, c):
+        return a + b > c and b + c > a and a + c > b
+
+    def perimeter(self):
+        return self._a + self._b + self._c
+
+    def area(self):
+        half = self.perimeter() / 2
+        return sqrt(half * (half - self._a) *
+                    (half - self._b) * (half - self._c))
+
+def main():
+    a, b, c = 3, 4, 5
+    # 静态方法和类方法都是通过给类发消息来调用的
+    # 这个时候我们还没创建对象t = Triangle()
+    ## 但是如果能组成三角形才会进入if判断
+    if Triangle.is_valid(a, b, c):
+        t = Triangle(a, b, c)
+        print(t.perimeter())
+        # 也可以通过给类发消息来调用对象方法但是要传入接收消息的对象作为参数
+        # print(Triangle.perimeter(t))
+        print(t.area())
+        # print(Triangle.area(t))
+    else:
+        print('无法构成三角形.')
+
+
+if __name__ == '__main__':
+    main()
+```
+
+在没有创建对象的时候就调用类中的方法，也就是`Triangle.is_valid(a, b, c)`。同时也可以通过这种方法调用*对象的方法*，但是要在方法中指定给那个对象发送信息。`Trangle.perimeter(t)`，t是实际的对象，对t发送信息需要将t写入括号中。
+
+## 类方法
+
+类其实也是一种对象，在类中创建了一个方法，也就是类方法@classmethod第一个参数默认是cls，也就是类本身。
+
+```python
+from time import time, localtime, sleep
+
+
+class Clock(object):
+    """数字时钟"""
+    def __init__(self, hour=0, minute=0, second=0):
+        self._hour = hour
+        self._minute = minute
+        self._second = second
+    @classmethod
+    def now(cls):
+        ctime = localtime(time())
+        return cls(ctime.tm_hour, ctime.tm_min, ctime.tm_sec)
+    def run(self):
+        """走字"""
+        self._second += 1
+        if self._second == 60:
+            self._second = 0
+            self._minute += 1
+            if self._minute == 60:
+                self._minute = 0
+                self._hour += 1
+                if self._hour == 24:
+                    self._hour = 0
+    def show(self):
+        """显示时间"""
+        return '%02d:%02d:%02d' % \
+               (self._hour, self._minute, self._second)
+
+def main():
+    # 通过类方法创建对象并获取系统时间
+    clock = Clock.now()
+    while True:
+        print(clock.show())
+        sleep(1)
+        clock.run()
+
+if __name__ == '__main__':
+    main()
+
+```
+
+上面的例子中，我们需要传入三个参数，分别是小时、分钟、秒，创建类方法之后，我们可以通过类方法创建对象，在类方法中返回的值是当前的系统时间。类方法相当于直接对类进行了操作。
+
+## 抽象类
+
+抽象类也就是无法创建对象实例的类，这种类是专门用来继承的。在python中没有语法层面的支持，可以通过abc模块的ABCMeta元类和abstractmethod包装器来达到抽象类的效果。
+
+
 
 # 生成二进制文件
 要想让没有安装python的用户使用程序，需要生成一个二进制文件，这里使用python的`pyinstaller`生成。
