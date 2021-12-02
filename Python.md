@@ -159,6 +159,8 @@ print(str2) #hello, world
 
 # 列表（数组）
 
+## 创建列表
+
 列表的值是一种结构化的有顺序的序列，也就是说和字符串类似，有一系列的方法和属性。定义的列表放在`[]`中，多个元素之间使用逗号分隔，同时可以使用for对列表元素进行遍历。
 
 有两种方式创建列表
@@ -166,6 +168,44 @@ print(str2) #hello, world
 empty_list = []
 empty_list = list()
 ```
+### 使用生成式语法创建列表
+
+```python
+f = [x for x in range(10)]
+f1 = [x + y 
+      for x in range(10)
+      for y in range(10)]
+f2 = [x + y 
+      for x in 'ABCDE'
+      for y in '12345']
+```
+
+f：生成一个从0到9的数字列表
+
+f1：会生成x1+y1，x1+y2，x1+y3，以此类推的生成列表
+
+f2：会和上面的生成方式类似，但是只是字符的组合，也即是字符串的运算。
+
+### 通过yield将普通函数包装成生成器
+
+我们通过yield包装之后的函数，所表现出来的性质会像一个容器。
+
+> Generator functions allow you to declare a function that behaves like an iterator, i.e. it can be used in a for loop.
+
+```python
+# 通过递归的方法实现斐波那契数列
+def _fib(n):
+    a, b = 0, 1
+    for _ in range(n):
+        a, b = b, a + b
+        yield a
+def fib():
+    for val in _fib(20): # 生尘器函数表现出容器的特性。
+        print(val)
+```
+
+
+
 ## 添加删除元素
 
 ### 添加
@@ -182,19 +222,27 @@ empty_list = list()
 
    参数：1. 列表
 
+   相同的用法还有
+
+   ```python
+   list1 = []
+   list2 = []
+   list2 += list1 # 将list2的列表加到list1后面并且命名为list1
+   ```
+
 ### 删除
 
-1. remove：删除指定元素
+1. `remove()`：删除指定元素
 
    参数：1. 元素
 
-2. pop：删除指定位置的元素
+2. `pop()`：删除指定位置的元素
 
-   参数：1. 位置
+   参数：1. 位置。不指定位置时删除最后一个元素
 
    返回值：被删除的元素
 
-3. clear：清空列表
+3. `clear()`：清空列表
 
    参数：无
 
@@ -213,27 +261,37 @@ listTuple = list(a_tuple)
 list_1 += list_2
 list_1.extend(list_2)
 ```
-使用`insert()`在特定位置插入元素，传入两个参数，第一个是位置，第二个是要插入的元素。
-`del`是python中的函数，并不是列表的特有函数，因此，在使用此函数删除元素的时候
+## 排序
+
+`sorted()`参数为列表，返回对列表的排序，但是并不会修改原数组，只是产生一个排序列表的副本。
+
+**并不是列表的方法**因此不用点引用。
+
+通过key关键字来指定以何种方式进行排序
+
 ```python
-del list[3]
+list = []
+sortedList = sorted(list, reverse = True, key = len)
+# reverse：逆向排序
+# key：指定按照字符长度进行排序而不是通过默认的字母表。
 ```
-这个函数会进行索引删除，还有一个`remove()`函数会特定删除，也就是删除作为参数的元素
-```python
-list.remove('removed')
-```
-使用`pop()`会删除元素，如果不指定的话会删除最后一个元素，在删除之后这个方法会返回被删除的元素
-```pythonn
-removed = list_1.pop(3)
-```
+
+
+
 ## 打乱原列表的顺序
+
 ```python
 from random import shuffle
 
 arr = [i for i in range(1, 11)]
 shuffle(arr)
 ```
+# 元组
+
+元组是一种不可修改内部元素的一种容器数据类型。
+
 # 函数
+
 在python中没有重载函数，也就是不能定义两个一样名字但是功能不同的函数。
 函数同名的时候可以放入模块中分别调用。在调用模块的时候如果不仅有函数还有一些代码行的时候，可以使用
 ```python
@@ -247,6 +305,10 @@ if __name__ == '__main__':
 # 内置函数
 
 这些函数都是python内置的函数，可以直接调用。
+
+## del函数
+
+在容器中索引并删除。
 
 ## len函数
 
