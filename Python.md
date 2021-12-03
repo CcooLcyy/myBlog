@@ -276,8 +276,6 @@ sortedList = sorted(list, reverse = True, key = len)
 # key：指定按照字符长度进行排序而不是通过默认的字母表。
 ```
 
-
-
 ## 打乱原列表的顺序
 
 ```python
