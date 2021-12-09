@@ -335,6 +335,72 @@ print(a1)
 
 ## 文件
 
+## 打开文件
+
+1. 手动打开但是也要手动关闭
+
+对于文件首先要打开，这里有两种方式进行打开
+
+```python
+f = open('Great_Expectations.txt', 'r', encoding='utf-8')
+print(f.read())
+f.close() # f.close()是必须要执行用来释放外部资源。
+```
+
+使用`open`打开的文件可以压入列表中。并且可以将元组作为文件名
+
+```python
+filename = ('1.txt', '2.txt', '3.txt')
+fs_list = []
+fs_list.append(open(filename, 'w', encoding='utf-8'))
+```
+
+2. 通过上下文自动释放
+
+第二种是使用上下文语法进行打开文件，这样在指定文件离开上下文的时候会自动释放
+
+```python
+with open('Great_Expectations.txt', 'r', encoding='utf-8') as f:
+    print(f.read())
+
+```
+
+这样在结束上下文之后程序会自动释放文件。
+
+## 读入文件
+
+使用`f.read()`来的读入文件，同时可以使用`print()`将文件显示在终端上
+
+我们开可以使用`for...in`循环来将文件进行逐行读入，并且是设置`sleep()`时间来间隔显示。最后使用`print()`来打印下一行。
+
+```python
+import time
+
+with open('Great_Expectations.txt', 'r', encoding='utf-8') as f:
+    for line in f:
+        print(line, end=' ')
+        time.sleep(1)
+print()
+```
+
+使用`f.readlines()`逐行读取到列表中
+
+```python
+with open('Great_Expectations.txt', 'r', encoding='utf-8') as f:
+    lines = f.readlines()
+    print(lines)
+```
+
+## 写入文件
+
+使用`open`打开的时候将文件的属性改为w，但是如果文件不存在会报错，或者追加写入a，此时如果文件不存在会自动创建文件。
+
+如果想要想文件写入可以使用`f.write()`函数参数的内容就是要向文件写入的内容。
+
+## 操作二进制文件
+
+
+
 ### 创建文件与删除文件
 
 使用open来创建一个文件，并且使用close关闭这个文件。
