@@ -6,40 +6,42 @@ tags: tools
 
 开源、分布式
 
-git可以追踪纯文本的更改，对于二进制文件或者图像视频，只能知道进行了更改，但是更改了什么内容无法得知。git可以追踪.doc文件，但是无法得知文件更改了什么内容。
+git可以追踪纯文本的更改，对于二进制文件或者图像视频，只能知道进行了更改，但是更改了什么内容无法得知。git可以追踪.doc文件，但是无法得知文件更改了什么内容，因为.doc文件是二进制的，git得知修改了什么内容。
 
-## 配置
+# 配置
 
 关于整个系统、用户、项目配置文件的所在地以及关系
 
+## 系统配置
+
+对系统中所有用户都可用的配置文件`/etc/gitconfig`
+
 ```shell
-## 对系统中所有用户可用的配置文件在
-/etc/gitconfig
-##在配置时使用
 git config --system
-
-## 对特定用户可用的配置文件在
-~/.gitconfig
-## 配置时使用
-git config --global
-
-## 当前项目的配置文件目录
-.git/config #仅仅针对该项目有效，并且优先级大约全局配置
-## 也就是说项目配置文件中的配置会覆盖全局配置
 ```
 
-### 用户信息
+## 用户配置
 
+对特定用户可用的配置文件在 `~/.gitconfig`
+该用户的所有仓库都有效
 ```shell
-## 配置个人的用户名和电子邮件地址
+git config --global
+```
+## 仓库配置
+当前项目的配置文件目录`.git/config`
+必须进入某个git仓库，仅仅针对该项目有效
+```shell
+git config --local
+```
+配置从低到高依次覆盖的，优先级local＞global＞system
+## 用户信息
+```shell
+## 配置到当前用户个人的用户名和电子邮件地址
 git config --global user.name "Daniel"
 git config --global user.email Cheng_mmm@iCloud.com
 ```
-
 同时，需要注意的是，使用了参数`--global`会更改用户个人的配置文件，而不是全局的配置文件。同时，如果去掉参数即可。
-
-### 配置信息的查看
-
+## 配置信息的查看
 ```shell
 $ git config --list
 user.email=Cheng_mmm@iCloud.com
@@ -48,7 +50,6 @@ credential.helper=store
 ```
 
 如果拥有重复的变量名则他们是属于不同的配置文件。
-
 同时也可以只查看某个特定的环境变量
 
 ~~~shell
@@ -56,17 +57,17 @@ git config user.name
 CcooLcyy
 ~~~
 
-## 基本概念
+# 基本概念
 
 有工作区、暂存区（index、stage）、版本库
 
 在工作区的文件可以理解为还没有加入暂存区进行追踪，使用`git add <file>`加入暂存区进行跟踪。同时`git add`可以同时添加多个文件。
 
-### 工作区
+## 工作区
 
 在本地电脑中能看到的目录就是工作区
 
-### 暂存区和版本库
+## 暂存区和版本库
 
 在工作区之下有一个`.git`文件夹，这个是git的版本库。
 
@@ -93,11 +94,11 @@ git checkout HEAD .
 git checkout HEAD <file>
 ```
 
-## 操作
+# 操作
 
 基本概念要理解，一般的原理要理解，但同时工科的东西不进行实操也都是纸上谈兵。
 
-### 掌握状态
+## 掌握状态
 
 ```shell
 ## 随时掌握工作区的状态
@@ -108,7 +109,7 @@ git diff
 
 通过上面的命令可以知道那些文件还没有加入git也就是还放在工作区，以及加入暂存区之后但是没有提交到版本库的文件。
 
-### 创建仓库添加文件
+## 创建仓库添加文件
 
 将一个目录作为git仓库
 
@@ -133,19 +134,19 @@ git add <file2>
 >
 > 在Windows系统中使用双引号
 
-### 克隆项目
+## 克隆项目
 
 ```shell
 ## 从现有仓库中拷贝项目到指定目录git clone <repo> <directory>## 同时，在当前目录clone的时候后面跟上一个新的文件夹名字可以直接克隆到文件夹
 ```
 
-### 提交和修改
+## 提交和修改
 
 ```shell
 ## 添加文件到暂存区git add## 将暂存提交到本地仓库git commit
 ```
 
-#### 删除
+### 删除
 
 删除也放在修改当中说，是因为，删除也是一种修改。
 
@@ -224,7 +225,7 @@ $ git status On branch masterChanges not staged for commit:  (use "git add/rm <f
 
 可以显示出每一次提交的版本号。通过这些版本号就可以直接前滚和回滚版本
 
-### 分支管理
+# 分支管理
 
 HEAD指向当前分支。当在主分支上时，主分支才是当前提交。
 
@@ -236,7 +237,7 @@ HEAD指向当前分支。当在主分支上时，主分支才是当前提交。
 
 删除分支同样，就是吧dev分支的指针删除了
 
-#### 创建分支
+## 创建分支
 
 ```shell
 ## 创建dev分支并切换到dev分支上。git checkout -b dev## 上一条命令等同于git branch devgit checkout dev
@@ -320,11 +321,13 @@ feature：放飞自我的地方。
 
 可以使用GitHub作为远程仓库，但是GitHub上的仓库是公开的，也就是任何人都可以看得到。想尽自己可见以来可以交钱设置私人仓库，在一个就是搭建个人呢的git服务器。
 
-### GitHub
+# GitHub
 
-关于GitHub更多的内容放在下面解释。
+对共有项目进行克隆甚至不需要进行注册，注册账户是为了
 
-拿GitHub来举例子，本地git仓库和GitHub之间使用的是SSH进行链接，所以我们首先要创建一个SSH key。
+## 通过SSH访问
+
+
 
 在我们用户目录下查看有没有`.ssh`目录，如果没有
 
@@ -338,7 +341,7 @@ feature：放飞自我的地方。
 
 我们登录GitHub的用户设置界面将我们的公钥内容复制到ssh里面。
 
-### 添加远程仓库
+## 添加远程仓库
 
 将本地仓库关联到远程仓库。
 
@@ -350,7 +353,7 @@ feature：放飞自我的地方。
 
 远程库的名字是origin，这是git的默认叫法，一般来说，origin就是远程库，当然也可以改名字。
 
-### 推送到远程仓库
+## 推送到远程仓库
 
 ```shell
 ## 第一次推送仓库并且关联仓库git push -u origin master
@@ -364,13 +367,13 @@ feature：放飞自我的地方。
 
 因为是第一次推送我们加上参数`-u`，这样会把本地的master推送的远程的master分支，并且还会把远程的master与本地的分支关联起来。
 
-### 从远程库克隆
+## 从远程库克隆
 
 ```shell
 ## 这个很好懂git clone git@github.com:<xxxxx>/<reponame.git>
 ```
 
-### 多人协作解决远程仓库冲突
+## 多人协作解决远程仓库冲突
 
 ```shell
 ## 查看远程仓库信息git remote -v
@@ -404,7 +407,7 @@ git checkout -b dev origin/dev
    git push origin <branchname>
    ```
 
-## 标签
+# 标签
 
 标签就是对版本库做的标注。一个标签只属于一个版本库，也就想是版本库的快照。但他本质上还是指针。同时他不能想指向commit的指针那样移动，他是不可动的。真因为是操作指针，他的创建和删除速度很快。
 
@@ -449,11 +452,6 @@ git checkout -b dev origin/dev
 ```shell
 git tag -d <tagname>git push origin :refs/tags/<tagname>
 ```
-
-## GitHub
-
-1. 别人的项目可以fork到自己的仓库中
-2. 只有自己的仓库才有读写权限，想要给别的仓库pull request也得看别人接不接受。
 
 ## 自定义git
 
